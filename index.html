@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minimal Text Gacha Simulator</title>
+  <title>Lunastrea</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -230,25 +230,29 @@
   <script>
     // --- GACHA DATABASE DEFINITION ---
     const GACHA_POOL = {
-      'SSR': [
-        { id: 'ssr_astraea', name: 'Astraea', title: 'Star Sovereign', rating: 'SSR', emoji: '👑' },
-        { id: 'ssr_ragnar', name: 'Ragnar', title: 'Dragon Monarch', rating: 'SSR', emoji: '🐉' },
-        { id: 'ssr_selene', name: 'Selene', title: 'Lunar Huntress', rating: 'SSR', emoji: '🏹' },
-        { id: 'ssr_zephyr', name: 'Zephyr', title: 'Void Weaver', rating: 'SSR', emoji: '🌀' }
+       'UR': [
+        { id: 'ur_faelyn', name: 'Faelyn', title: 'Star Faller', rating: 'UR', emoji: '🎇' },
       ],
       'SR': [
-        { id: 'sr_valerie', name: 'Valerie', title: 'Shield Maiden', rating: 'SR', emoji: '🛡️' },
-        { id: 'sr_kael', name: 'Kaelen', title: 'Pyromancer', rating: 'SR', emoji: '🔥' },
-        { id: 'sr_lyra', name: 'Lyra', title: 'Wind Accord', rating: 'SR', emoji: '🎵' },
-        { id: 'sr_vance', name: 'Vance', title: 'Rogue Spectre', rating: 'SR', emoji: '🗡️' }
+        { id: 'sr_astraea', name: 'Astraea', title: 'Star Sovereign', rating: 'SR', emoji: '👑' },
+        { id: 'sr_ragnar', name: 'Ragnar', title: 'Dragon Monarch', rating: 'SR', emoji: '🐉' },
+        { id: 'sr_selene', name: 'Selene', title: 'Lunar Huntress', rating: 'SR', emoji: '🏹' },
+        { id: 'sr_zephyr', name: 'Zephyr', title: 'Void Weaver', rating: 'SR', emoji: '🌀' },
+        { id: 'sr_nephy', name: 'Nephylm', title: 'Dream Bringer', rating: 'SR', emoji: '☁' }
       ],
       'R': [
-        { id: 'r_recruit', name: 'Iron Guard Recruit', title: 'Defender', rating: 'R', emoji: '⚔️' },
-        { id: 'r_scribe', name: 'Apprentice Scribe', title: 'Scholar', rating: 'R', emoji: '📜' },
-        { id: 'r_scout', name: 'Borderland Scout', title: 'Tracker', rating: 'R', emoji: '👢' },
-        { id: 'r_acolyte', name: 'Novice Acolyte', title: 'Healer', rating: 'R', emoji: '🧪' }
+        { id: 'r_valerie', name: 'Valerie', title: 'Shield Maiden', rating: 'R', emoji: '🛡️' },
+        { id: 'r_kael', name: 'Kaelen', title: 'Pyromancer', rating: 'R', emoji: '🔥' },
+        { id: 'r_lyra', name: 'Lyra', title: 'Wind Accord', rating: 'R', emoji: '🎵' },
+        { id: 'r_vance', name: 'Vance', title: 'Rogue Spectre', rating: 'R', emoji: '🗡️' }
       ],
-      'COMMON': [
+      'UC': [
+        { id: 'uc_recruit', name: 'Iron Guard Recruit', title: 'Defender', rating: 'UC', emoji: '⚔️' },
+        { id: 'uc_scribe', name: 'Apprentice Scribe', title: 'Scholar', rating: 'UC', emoji: '📜' },
+        { id: 'uc_scout', name: 'Borderland Scout', title: 'Tracker', rating: 'UC', emoji: '👢' },
+        { id: 'uc_acolyte', name: 'Novice Acolyte', title: 'Healer', rating: 'UC', emoji: '🧪' }
+      ],
+      'C': [
         { id: 'c_sword', name: 'Dull Iron Sword', title: 'Basic Weapon', rating: 'Common', emoji: '🔪' },
         { id: 'c_shield', name: 'Splintered Buckler', title: 'Basic Gear', rating: 'Common', emoji: '🪵' },
         { id: 'c_potion', name: 'Lesser Mana Tonic', title: 'Consumable', rating: 'Common', emoji: '💧' },
