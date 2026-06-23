@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lunastrea</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -15,31 +13,35 @@
     .mono {
       font-family: 'Space Mono', monospace;
     }
-    /* Simple shimmer effect for legendary items */
-    @keyframes goldShimmer {
+    /* Simple shimmer effects for high rarity tiers */
+    @keyframes rainbowShimmer {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+    .rainbow-gradient {
+      background: linear-gradient(-45deg, #ff007f, #7928ca, #00dfd8, #ff007f);
+      background-size: 300% 300%;
+      animation: rainbowShimmer 3s ease infinite;
+    }
     .gold-gradient {
       background: linear-gradient(-45deg, #fbbf24, #f59e0b, #d97706, #b45309);
       background-size: 300% 300%;
-      animation: goldShimmer 4s ease infinite;
+      animation: rainbowShimmer 4s ease infinite;
     }
     .purple-gradient {
       background: linear-gradient(-45deg, #a78bfa, #8b5cf6, #7c3aed, #6d28d9);
       background-size: 300% 300%;
-      animation: goldShimmer 4s ease infinite;
+      animation: rainbowShimmer 4s ease infinite;
     }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
 
-  <!-- Header Banner -->
   <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-10 px-4 py-3">
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-3">
-        <div class="bg-amber-500 text-slate-950 p-2 rounded-lg font-bold text-xs tracking-wider uppercase">
+        <div class="bg-indigo-500 text-slate-950 p-2 rounded-lg font-bold text-xs tracking-wider uppercase">
           Gacha Core v1.2
         </div>
         <div>
@@ -50,7 +52,6 @@
         </div>
       </div>
 
-      <!-- Currency & Reset Controls -->
       <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
         <div class="bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-2 text-sm">
           <span class="text-amber-400 font-bold">✨</span>
@@ -60,7 +61,7 @@
         <button onclick="getDailyAllowance()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-3 py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap">
           +1,600 Daily
         </button>
-        <button onclick="resetSimulator()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-slate-600 p-2 rounded-lg transition-all" title="Reset All State">
+        <button onclick="resetSimulator()" class="bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 p-2 rounded-lg transition-all" title="Reset All State">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 15H15M20 20v-5h-5" />
           </svg>
@@ -69,58 +70,55 @@
     </div>
   </header>
 
-  <!-- Main Workspace -->
   <main class="flex-grow max-w-6xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
     
-    <!-- Left Panel: Gacha Banner & Summons (7 columns on large screen) -->
     <section class="lg:col-span-7 flex flex-col gap-6">
       
-      <!-- Banner Card -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-        <!-- Visual Accent Header -->
-        <div class="gold-gradient h-2 w-full"></div>
+        <div class="rainbow-gradient h-2 w-full"></div>
         <div class="p-6">
           <div class="flex justify-between items-start mb-4">
             <div>
-              <span class="text-[10px] uppercase tracking-widest text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/40 border border-amber-900/50">Limited Banner</span>
+              <span class="text-[10px] uppercase tracking-widest text-fuchsia-400 font-bold px-2 py-0.5 rounded bg-fuchsia-950/40 border border-fuchsia-900/50">Cosmic Flux Banner</span>
               <h2 class="text-2xl font-bold text-white mt-2">Echoes of the Cosmos</h2>
-              <p class="text-sm text-slate-400 mt-1">Rate up for SSR <span class="text-amber-400 font-semibold">Astraea, Star Sovereign</span>!</p>
+              <p class="text-sm text-slate-400 mt-1">Featuring Ultra Rare <span class="text-fuchsia-400 font-semibold">Faelyn, Star Faller</span>!</p>
             </div>
             <div class="text-right">
-              <div class="text-xs text-slate-500">Pity System</div>
+              <div class="text-xs text-slate-500">SR Pity System</div>
               <div class="text-sm font-semibold text-slate-300"><span id="pity-counter" class="text-amber-400 font-bold mono">0</span>/80</div>
             </div>
           </div>
 
-          <!-- Drop rates info -->
           <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80 mb-6 text-xs space-y-2">
             <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[10px]">Drop Probability Matrix</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded bg-fuchsia-500"></span>
+                <span class="text-slate-400">UR: <strong class="text-fuchsia-400">0.5%</strong></span>
+              </div>
               <div class="flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded bg-amber-500"></span>
-                <span class="text-slate-400">SSR: <strong class="text-amber-400">1.5%</strong></span>
+                <span class="text-slate-400">SR: <strong class="text-amber-400">1.0%</strong></span>
               </div>
               <div class="flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded bg-violet-500"></span>
-                <span class="text-slate-400">SR: <strong class="text-violet-400">8.5%</strong></span>
+                <span class="text-slate-400">R: <strong class="text-violet-400">8.5%</strong></span>
               </div>
               <div class="flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded bg-sky-500"></span>
-                <span class="text-slate-400">R: <strong class="text-sky-400">30%</strong></span>
+                <span class="text-slate-400">UC: <strong class="text-sky-400">30%</strong></span>
               </div>
               <div class="flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded bg-slate-500"></span>
-                <span class="text-slate-400">Common: <strong class="text-slate-400">60%</strong></span>
+                <span class="text-slate-400">C: <strong class="text-slate-400">60%</strong></span>
               </div>
             </div>
             <p class="text-[10px] text-slate-500 pt-2 border-t border-slate-900/60">
-              * Guaranteed <span class="text-violet-400 font-medium">SR or higher</span> every 10 summons. Hard-pity <span class="text-amber-400 font-medium">SSR guaranteed</span> at 80 summons.
+              * Guaranteed <span class="text-violet-400 font-medium">R or higher</span> every 10 summons. Hard-pity <span class="text-amber-400 font-medium">SR guaranteed</span> at 80 summons.
             </p>
           </div>
 
-          <!-- Summon Command Center -->
           <div class="flex flex-col sm:flex-row gap-4">
-            <!-- Single Summon -->
             <button onclick="summon(1)" class="flex-1 bg-slate-800 hover:bg-slate-750 text-white font-semibold py-4 px-6 rounded-xl border border-slate-700/80 hover:border-slate-600 transition-all cursor-pointer flex flex-col items-center justify-center gap-1 group">
               <span class="group-hover:scale-110 transition-transform text-lg">✦</span>
               <span class="text-sm font-bold">Summon x1</span>
@@ -129,7 +127,6 @@
               </span>
             </button>
             
-            <!-- Multi Summon (10x) -->
             <button onclick="summon(10)" class="flex-1 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-indigo-950/30 transition-all cursor-pointer flex flex-col items-center justify-center gap-1 group">
               <span class="group-hover:rotate-12 transition-transform text-lg">✦✦✦</span>
               <span class="text-sm font-extrabold">Summon x10</span>
@@ -141,7 +138,6 @@
         </div>
       </div>
 
-      <!-- Live Logs Panel -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl flex-grow flex flex-col overflow-hidden max-h-[300px] lg:max-h-[400px]">
         <div class="p-4 border-b border-slate-800 flex justify-between items-center">
           <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Summon Logs</h3>
@@ -154,40 +150,33 @@
 
     </section>
 
-    <!-- Right Panel: Results & Inventory (5 columns) -->
     <section class="lg:col-span-5 flex flex-col gap-6">
       
-      <!-- Instant Pull Results Showcase -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
         <div>
           <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Current Summon Outcome</h3>
           <div id="pull-results-container" class="min-h-[140px] flex flex-col justify-center items-center gap-2 border border-dashed border-slate-800 rounded-xl bg-slate-950/40 p-4">
-            <!-- Idle State -->
             <div id="idle-outcome-msg" class="text-center">
               <span class="text-4xl">🌠</span>
               <p class="text-sm text-slate-400 mt-2 font-medium">Summoning portal idle.</p>
               <p class="text-xs text-slate-600 mt-0.5">Your star alignments await.</p>
             </div>
-            
-            <!-- Dynamic Result Elements inserted here -->
             <div id="summon-outcome-grid" class="w-full hidden grid grid-cols-2 sm:grid-cols-5 gap-2"></div>
           </div>
         </div>
       </div>
 
-      <!-- Quick Stats Widget -->
       <div class="grid grid-cols-2 gap-4">
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
           <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Summons</div>
           <div id="stat-total-pulls" class="text-2xl font-bold text-white mono mt-1">0</div>
         </div>
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
-          <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">SSR Pull Rate</div>
-          <div id="stat-ssr-rate" class="text-2xl font-bold text-amber-400 mono mt-1">0.0%</div>
+          <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">UR/SR Pull Rate</div>
+          <div id="stat-sr-rate" class="text-2xl font-bold text-fuchsia-400 mono mt-1">0.0%</div>
         </div>
       </div>
 
-      <!-- Simple Toast Message Box -->
       <div id="custom-alert" class="hidden bg-red-950/80 border border-red-800 text-red-200 text-xs rounded-xl p-4 flex items-center justify-between gap-3">
         <span id="custom-alert-text">Insufficient Astral Shards!</span>
         <button onclick="dismissAlert()" class="text-red-400 hover:text-red-200 font-bold px-2 py-1">Dismiss</button>
@@ -197,7 +186,6 @@
 
   </main>
 
-  <!-- Inventory Section (Spans Full Width At Bottom) -->
   <section class="max-w-6xl w-full mx-auto p-4 mb-10">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800 mb-6">
@@ -206,14 +194,13 @@
           <p class="text-xs text-slate-400">Complete listing of characters collected with duplicate stars (Constellations)</p>
         </div>
         <div class="flex gap-2">
-          <!-- Quick filters -->
           <button onclick="filterInventory('all')" id="btn-filter-all" class="bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer">All</button>
-          <button onclick="filterInventory('SSR')" id="btn-filter-ssr" class="text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer">SSR Only</button>
+          <button onclick="filterInventory('UR')" id="btn-filter-ur" class="text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer">UR</button>
+          <button onclick="filterInventory('SR')" id="btn-filter-sr" class="text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer">SR</button>
         </div>
       </div>
 
       <div id="inventory-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <!-- Dynamic Cards Inserted Here -->
         <div id="empty-inventory-msg" class="col-span-full py-12 text-center text-slate-500 text-sm">
           No records found. Complete your first summon to build your squad!
         </div>
@@ -221,24 +208,22 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="mt-auto py-6 border-t border-slate-900 text-center text-[10px] text-slate-600 bg-slate-950">
-    Chronicle Summoner | No Real Money Required. Simulated Luck Metrics generated by JavaScript Math.random()
+    Chronicle Summoner | No Real Money Required.
   </footer>
 
-  <!-- Script logic implementing data structures, pools, pulls, state tracking & rendering -->
   <script>
     // --- GACHA DATABASE DEFINITION ---
     const GACHA_POOL = {
-       'UR': [
-        { id: 'ur_faelyn', name: 'Faelyn', title: 'Star Faller', rating: 'UR', emoji: '🎇' },
+      'UR': [
+        { id: 'ur_faelyn', name: 'Faelyn', title: 'Star Faller', rating: 'UR', emoji: '🎇' }
       ],
       'SR': [
         { id: 'sr_astraea', name: 'Astraea', title: 'Star Sovereign', rating: 'SR', emoji: '👑' },
         { id: 'sr_ragnar', name: 'Ragnar', title: 'Dragon Monarch', rating: 'SR', emoji: '🐉' },
         { id: 'sr_selene', name: 'Selene', title: 'Lunar Huntress', rating: 'SR', emoji: '🏹' },
         { id: 'sr_zephyr', name: 'Zephyr', title: 'Void Weaver', rating: 'SR', emoji: '🌀' },
-        { id: 'sr_nephy', name: 'Nephylm', title: 'Dream Bringer', rating: 'SR', emoji: '☁' }
+        { id: 'sr_nephy', name: 'Nephylm', title: 'Dream Bringer', rating: 'SR', emoji: '☁️' }
       ],
       'R': [
         { id: 'r_valerie', name: 'Valerie', title: 'Shield Maiden', rating: 'R', emoji: '🛡️' },
@@ -253,10 +238,10 @@
         { id: 'uc_acolyte', name: 'Novice Acolyte', title: 'Healer', rating: 'UC', emoji: '🧪' }
       ],
       'C': [
-        { id: 'c_sword', name: 'Dull Iron Sword', title: 'Basic Weapon', rating: 'Common', emoji: '🔪' },
-        { id: 'c_shield', name: 'Splintered Buckler', title: 'Basic Gear', rating: 'Common', emoji: '🪵' },
-        { id: 'c_potion', name: 'Lesser Mana Tonic', title: 'Consumable', rating: 'Common', emoji: '💧' },
-        { id: 'c_stone', name: 'Polished Quartz', title: 'Catalyst', rating: 'Common', emoji: '💎' }
+        { id: 'c_sword', name: 'Dull Iron Sword', title: 'Basic Weapon', rating: 'C', emoji: '🔪' },
+        { id: 'c_shield', name: 'Splintered Buckler', title: 'Basic Gear', rating: 'C', emoji: '🪵' },
+        { id: 'c_potion', name: 'Lesser Mana Tonic', title: 'Consumable', rating: 'C', emoji: '💧' },
+        { id: 'c_stone', name: 'Polished Quartz', title: 'Catalyst', rating: 'C', emoji: '💎' }
       ]
     };
 
@@ -266,51 +251,41 @@
       pityCounter: 0,
       srPityCounter: 0,
       totalPulls: 0,
-      ssrPulls: 0,
-      inventory: {}, // Format: { "ssr_astraea": count }
+      srPulls: 0, 
+      inventory: {}, 
       currentFilter: 'all',
       historyLogs: []
     };
 
-    // Initialize State from Storage or fresh
     function init() {
-      // LocalStorage fallbacks
       const saved = localStorage.getItem('text_gacha_simulator_state');
       if (saved) {
-        try {
-          state = JSON.parse(saved);
-        } catch(e) {
-          console.warn("Could not load local storage", e);
-        }
+        try { state = JSON.parse(saved); } catch(e) { console.warn(e); }
       }
       updateUI();
     }
 
-    // Save state
     function save() {
       localStorage.setItem('text_gacha_simulator_state', JSON.stringify(state));
     }
 
-    // Reset All State
     function resetSimulator() {
       state = {
         shards: 16000,
         pityCounter: 0,
         srPityCounter: 0,
         totalPulls: 0,
-        ssrPulls: 0,
+        srPulls: 0,
         inventory: {},
         currentFilter: 'all',
         historyLogs: []
       };
       save();
       updateUI();
-      // Reset outcome view to idle
       document.getElementById('summon-outcome-grid').classList.add('hidden');
       document.getElementById('idle-outcome-msg').classList.remove('hidden');
     }
 
-    // Get daily allowance
     function getDailyAllowance() {
       state.shards += 1600;
       save();
@@ -324,99 +299,83 @@
       state.srPityCounter++;
       state.totalPulls++;
 
-      let rollRarity = 'COMMON';
+      let rollRarity = 'C';
       
-      // Determine Rarity
-      // 1. Hard Pity Check (80 pulls guarantees SSR)
       if (state.pityCounter >= 80) {
-        rollRarity = 'SSR';
+        rollRarity = 'SR';
       } else {
-        // 2. Soft Pity Guarantee (Every 10 pulls guarantees SR or above)
-        let isSrGuaranteed = (state.srPityCounter >= 10);
-        
+        let isPityGuaranteed = (state.srPityCounter >= 10);
         let roll = Math.random() * 100;
         
-        if (roll < 1.5) {
-          rollRarity = 'SSR';
-        } else if (roll < 10.0) { // 8.5% chance
+        // Exact math constraints match your custom tier criteria
+        if (roll < 0.5) {
+          rollRarity = 'UR';
+        } else if (roll < 1.5) {
           rollRarity = 'SR';
-        } else if (roll < 40.0) { // 30.0% chance
+        } else if (roll < 10.0) { 
           rollRarity = 'R';
+        } else if (roll < 40.0) { 
+          rollRarity = 'UC';
         } else {
-          rollRarity = 'COMMON';
+          rollRarity = 'C';
         }
 
-        // Apply SR pity override if applicable
-        if (isSrGuaranteed && rollRarity !== 'SSR' && rollRarity !== 'SR') {
-          rollRarity = 'SR';
+        // Pity override applies if rolling below R on your 10th pull
+        if (isPityGuaranteed && rollRarity !== 'UR' && rollRarity !== 'SR' && rollRarity !== 'R') {
+          rollRarity = 'R';
         }
       }
 
-      // Reset Pity Triggers
-      if (rollRarity === 'SSR') {
+      // Reset Pity Counter Triggers
+      if (rollRarity === 'SR') {
         state.pityCounter = 0;
-        state.ssrPulls++;
       }
-      if (rollRarity === 'SSR' || rollRarity === 'SR') {
+      if (rollRarity === 'UR' || rollRarity === 'SR') {
+        state.srPulls++; // Track premium tiers together
+      }
+      if (rollRarity === 'UR' || rollRarity === 'SR' || rollRarity === 'R') {
         state.srPityCounter = 0;
       }
 
-      // Pick a random item from the chosen pool
       const list = GACHA_POOL[rollRarity];
       const selectedItem = list[Math.floor(Math.random() * list.length)];
 
-      // Register to inventory
       state.inventory[selectedItem.id] = (state.inventory[selectedItem.id] || 0) + 1;
-
       return selectedItem;
     }
 
-    // Multi Gacha Summon Routine
     function summon(count) {
       dismissAlert();
       const cost = count * 160;
 
       if (state.shards < cost) {
-        showAlert(`Insufficient Astral Shards! You need ${cost} Shards but only have ${state.shards}. Click the daily allowance to recharge.`);
+        showAlert(`Insufficient Shards! Need ${cost} but have ${state.shards}.`);
         return;
       }
 
-      // Deduct funds
       state.shards -= cost;
-
-      // Execute Rolls
       const results = [];
       for (let i = 0; i < count; i++) {
         results.push(rollSingle());
       }
 
-      // Render outputs & save
       renderOutcome(results);
       save();
       updateUI();
     }
 
-    // --- UI UPDATER / RENDERING ENGINES ---
     function updateUI() {
-      // Shards
       document.getElementById('currency-display').innerText = state.shards.toLocaleString();
-      
-      // Pity Count
       document.getElementById('pity-counter').innerText = state.pityCounter;
-
-      // Stats
       document.getElementById('stat-total-pulls').innerText = state.totalPulls;
-      const ssrRate = state.totalPulls > 0 ? ((state.ssrPulls / state.totalPulls) * 100).toFixed(1) : "0.0";
-      document.getElementById('stat-ssr-rate').innerText = `${ssrRate}%`;
+      
+      const rate = state.totalPulls > 0 ? ((state.srPulls / state.totalPulls) * 100).toFixed(1) : "0.0";
+      document.getElementById('stat-sr-rate').innerText = `${rate}%`;
 
-      // Update Inventory
       renderInventory();
-
-      // Update logs
       renderLogs();
     }
 
-    // Custom non-alert alert handling
     function showAlert(msg) {
       const el = document.getElementById('custom-alert');
       document.getElementById('custom-alert-text').innerText = msg;
@@ -427,16 +386,12 @@
       document.getElementById('custom-alert').classList.add('hidden');
     }
 
-    // Render outcome list
     function renderOutcome(items) {
       const container = document.getElementById('summon-outcome-grid');
-      const idleMsg = document.getElementById('idle-outcome-msg');
-
-      idleMsg.classList.add('hidden');
+      document.getElementById('idle-outcome-msg').classList.add('hidden');
       container.classList.remove('hidden');
-      container.innerHTML = ''; // reset
+      container.innerHTML = '';
 
-      // Adjust column layout dynamically depending on pulling count
       if (items.length === 1) {
         container.className = "w-full max-w-sm mx-auto flex justify-center py-2";
       } else {
@@ -445,98 +400,84 @@
 
       items.forEach((item, index) => {
         const itemEl = document.createElement('div');
-        
-        // Define styling classes per rarity
-        let borderClass = 'border-slate-800 bg-slate-900';
-        let rarityTextClass = 'text-slate-500';
+        let borderClass = 'border-slate-800 bg-slate-900 text-slate-200';
         let glowClass = '';
 
-        if (item.rating === 'SSR') {
-          borderClass = 'gold-gradient text-slate-950 font-bold';
-          rarityTextClass = 'text-slate-900 bg-amber-300 px-1 py-0.5 rounded text-[9px]';
-          glowClass = 'shadow-lg shadow-amber-500/20';
+        if (item.rating === 'UR') {
+          borderClass = 'rainbow-gradient text-slate-950 font-bold';
+          glowClass = 'shadow-lg shadow-fuchsia-500/30';
         } else if (item.rating === 'SR') {
-          borderClass = 'purple-gradient text-slate-100 font-semibold';
-          rarityTextClass = 'text-white bg-violet-900/60 px-1 py-0.5 rounded text-[9px] border border-violet-700/50';
-          glowClass = 'shadow-lg shadow-violet-500/10';
+          borderClass = 'gold-gradient text-slate-950 font-bold';
+          glowClass = 'shadow-lg shadow-amber-500/20';
         } else if (item.rating === 'R') {
+          borderClass = 'purple-gradient text-slate-100 font-semibold';
+          glowClass = 'shadow-lg shadow-violet-500/10';
+        } else if (item.rating === 'UC') {
           borderClass = 'border-sky-800 bg-sky-950/40 text-sky-200';
-          rarityTextClass = 'text-sky-400 font-semibold';
-        } else {
-          borderClass = 'border-slate-800 bg-slate-950/70 text-slate-400';
-          rarityTextClass = 'text-slate-500';
         }
 
-        // Design modern cards
-        itemEl.className = `p-3 rounded-xl border ${borderClass} ${glowClass} flex flex-col items-center justify-between text-center transition-all transform scale-95 animate-pulse duration-75`;
+        itemEl.className = `p-3 rounded-xl border ${borderClass} ${glowClass} flex flex-col items-center justify-between text-center transition-all transform scale-95 animate-pulse`;
         
-        // Use delay staggered timers to create sequential reveal feeling
         setTimeout(() => {
           itemEl.classList.remove('animate-pulse', 'scale-95');
           itemEl.classList.add('scale-100');
         }, index * 80);
 
+        const isPremium = item.rating === 'UR' || item.rating === 'SR';
         itemEl.innerHTML = `
           <div class="text-2xl mb-1">${item.emoji}</div>
-          <div class="text-xs font-bold line-clamp-1 w-full leading-tight ${item.rating === 'SSR' ? 'text-slate-950' : 'text-slate-200'}">${item.name}</div>
-          <div class="text-[9px] mt-1 text-slate-400 font-semibold">${item.rating}</div>
+          <div class="text-xs font-bold line-clamp-1 w-full leading-tight ${isPremium ? 'text-slate-950' : 'text-slate-200'}">${item.name}</div>
+          <div class="text-[9px] mt-1 ${isPremium ? 'text-slate-900 font-extrabold' : 'text-slate-400 font-semibold'}">${item.rating}</div>
         `;
-
         container.appendChild(itemEl);
 
-        // Append to logs array
         let logColor = 'text-slate-400';
-        if (item.rating === 'SSR') logColor = 'text-amber-400 font-bold';
-        else if (item.rating === 'SR') logColor = 'text-violet-400 font-semibold';
-        else if (item.rating === 'R') logColor = 'text-sky-400';
+        if (item.rating === 'UR') logColor = 'text-fuchsia-400 font-extrabold';
+        else if (item.rating === 'SR') logColor = 'text-amber-400 font-bold';
+        else if (item.rating === 'R') logColor = 'text-violet-400';
 
         addLog("SUMMON", `Obtained [${item.rating}] ${item.name} (${item.title})`, logColor);
       });
     }
 
-    // Inventory Renderer
     function renderInventory() {
       const container = document.getElementById('inventory-grid');
-      container.innerHTML = ''; // reset
-
-      // Gather active card list items
+      container.innerHTML = '';
       const itemsToRender = [];
 
       Object.keys(GACHA_POOL).forEach(rarity => {
         GACHA_POOL[rarity].forEach(char => {
           const count = state.inventory[char.id] || 0;
-          if (count > 0) {
-            itemsToRender.push({ ...char, count });
-          }
+          if (count > 0) itemsToRender.push({ ...char, count });
         });
       });
 
-      // Sort by rarity rating (SSR -> SR -> R -> Common)
-      const rarityRank = { 'SSR': 4, 'SR': 3, 'R': 2, 'Common': 1 };
+      const rarityRank = { 'UR': 5, 'SR': 4, 'R': 3, 'UC': 2, 'C': 1 };
       itemsToRender.sort((a, b) => rarityRank[b.rating] - rarityRank[a.rating]);
 
-      // Apply quick tab filter logic
       const filtered = itemsToRender.filter(item => {
         if (state.currentFilter === 'all') return true;
         return item.rating === state.currentFilter;
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 text-sm">No characters found matching this criteria. Keep pulling to get them!</div>`;
+        container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 text-sm">No characters found matching this criteria.</div>`;
         return;
       }
 
       filtered.forEach(item => {
         const card = document.createElement('div');
-        
         let rarityLabelColor = 'bg-slate-800 text-slate-300';
         let cardBg = 'bg-slate-950/60 border-slate-800/80';
         let duplicateBadge = '';
 
-        if (item.rating === 'SSR') {
+        if (item.rating === 'UR') {
+          rarityLabelColor = 'bg-fuchsia-600 text-white';
+          cardBg = 'bg-slate-900 border-fuchsia-500/20 shadow-sm shadow-fuchsia-500/5';
+        } else if (item.rating === 'SR') {
           rarityLabelColor = 'bg-amber-500 text-slate-950';
           cardBg = 'bg-slate-900 border-amber-500/20 shadow-sm shadow-amber-500/5';
-        } else if (item.rating === 'SR') {
+        } else if (item.rating === 'R') {
           rarityLabelColor = 'bg-violet-600 text-white';
           cardBg = 'bg-slate-900 border-violet-500/20';
         }
@@ -564,21 +505,12 @@
       });
     }
 
-    // Toggle Tab Filters
     function filterInventory(rarity) {
       state.currentFilter = rarity;
-      
-      const btnAll = document.getElementById('btn-filter-all');
-      const btnSsr = document.getElementById('btn-filter-ssr');
-
-      if (rarity === 'all') {
-        btnAll.className = 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
-        btnSsr.className = 'text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
-      } else {
-        btnAll.className = 'text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
-        btnSsr.className = 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
-      }
-
+      ['all', 'ur', 'sr'].forEach(id => {
+        document.getElementById(`btn-filter-${id}`).className = 'text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
+      });
+      document.getElementById(`btn-filter-${rarity.toLowerCase()}`).className = 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
       renderInventory();
     }
 
@@ -586,20 +518,15 @@
     function addLog(action, message, textClass = 'text-slate-300') {
       const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       state.historyLogs.unshift({ timestamp, action, message, textClass });
-      
-      // Limit to last 50 logs for performance
-      if (state.historyLogs.length > 50) {
-        state.historyLogs.pop();
-      }
+      if (state.historyLogs.length > 50) state.historyLogs.pop();
     }
 
     function renderLogs() {
       const logContainer = document.getElementById('log-list');
       if (state.historyLogs.length === 0) {
-        logContainer.innerHTML = `<div class="text-slate-500 italic">No summoning history yet. Harness your cosmic shards and try your luck!</div>`;
+        logContainer.innerHTML = `<div class="text-slate-500 italic">No history yet.</div>`;
         return;
       }
-
       logContainer.innerHTML = state.historyLogs.map(log => `
         <div class="pb-1 border-b border-slate-950/20">
           <span class="text-slate-600">[${log.timestamp}]</span>
@@ -615,7 +542,6 @@
       updateUI();
     }
 
-    // Run Startup Init
     init();
   </script>
 </body>
