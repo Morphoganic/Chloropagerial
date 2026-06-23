@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lunastrea</title>
+  <title>Minimal Text Gacha Simulator</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -13,8 +15,8 @@
     .mono {
       font-family: 'Space Mono', monospace;
     }
-    /* Simple shimmer effects for high rarity tiers */
-    @keyframes rainbowShimmer {
+    /* Dynamic shimmer effects for high rarity tiers */
+    @keyframes goldShimmer {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
@@ -22,22 +24,23 @@
     .rainbow-gradient {
       background: linear-gradient(-45deg, #ff007f, #7928ca, #00dfd8, #ff007f);
       background-size: 300% 300%;
-      animation: rainbowShimmer 3s ease infinite;
+      animation: goldShimmer 3s ease infinite;
     }
     .gold-gradient {
       background: linear-gradient(-45deg, #fbbf24, #f59e0b, #d97706, #b45309);
       background-size: 300% 300%;
-      animation: rainbowShimmer 4s ease infinite;
+      animation: goldShimmer 4s ease infinite;
     }
     .purple-gradient {
       background: linear-gradient(-45deg, #a78bfa, #8b5cf6, #7c3aed, #6d28d9);
       background-size: 300% 300%;
-      animation: rainbowShimmer 4s ease infinite;
+      animation: goldShimmer 4s ease infinite;
     }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
 
+  <!-- Header Banner -->
   <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-10 px-4 py-3">
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-3">
@@ -52,6 +55,7 @@
         </div>
       </div>
 
+      <!-- Currency & Reset Controls -->
       <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
         <div class="bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-2 text-sm">
           <span class="text-amber-400 font-bold">✨</span>
@@ -61,7 +65,7 @@
         <button onclick="getDailyAllowance()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-3 py-2 rounded-lg transition-colors cursor-pointer whitespace-nowrap">
           +1,600 Daily
         </button>
-        <button onclick="resetSimulator()" class="bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 p-2 rounded-lg transition-all" title="Reset All State">
+        <button onclick="resetSimulator()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-slate-600 p-2 rounded-lg transition-all" title="Reset All State">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 15H15M20 20v-5h-5" />
           </svg>
@@ -70,11 +74,15 @@
     </div>
   </header>
 
+  <!-- Main Workspace -->
   <main class="flex-grow max-w-6xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
     
+    <!-- Left Panel: Gacha Banner & Summons (7 columns on large screen) -->
     <section class="lg:col-span-7 flex flex-col gap-6">
       
+      <!-- Banner Card -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <!-- Visual Accent Header -->
         <div class="rainbow-gradient h-2 w-full"></div>
         <div class="p-6">
           <div class="flex justify-between items-start mb-4">
@@ -89,6 +97,7 @@
             </div>
           </div>
 
+          <!-- Drop rates info -->
           <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80 mb-6 text-xs space-y-2">
             <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[10px]">Drop Probability Matrix</h3>
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1">
@@ -118,7 +127,9 @@
             </p>
           </div>
 
+          <!-- Summon Command Center -->
           <div class="flex flex-col sm:flex-row gap-4">
+            <!-- Single Summon -->
             <button onclick="summon(1)" class="flex-1 bg-slate-800 hover:bg-slate-750 text-white font-semibold py-4 px-6 rounded-xl border border-slate-700/80 hover:border-slate-600 transition-all cursor-pointer flex flex-col items-center justify-center gap-1 group">
               <span class="group-hover:scale-110 transition-transform text-lg">✦</span>
               <span class="text-sm font-bold">Summon x1</span>
@@ -127,6 +138,7 @@
               </span>
             </button>
             
+            <!-- Multi Summon (10x) -->
             <button onclick="summon(10)" class="flex-1 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-indigo-950/30 transition-all cursor-pointer flex flex-col items-center justify-center gap-1 group">
               <span class="group-hover:rotate-12 transition-transform text-lg">✦✦✦</span>
               <span class="text-sm font-extrabold">Summon x10</span>
@@ -138,6 +150,7 @@
         </div>
       </div>
 
+      <!-- Live Logs Panel -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl flex-grow flex flex-col overflow-hidden max-h-[300px] lg:max-h-[400px]">
         <div class="p-4 border-b border-slate-800 flex justify-between items-center">
           <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Summon Logs</h3>
@@ -150,22 +163,28 @@
 
     </section>
 
+    <!-- Right Panel: Results & Inventory (5 columns) -->
     <section class="lg:col-span-5 flex flex-col gap-6">
       
+      <!-- Instant Pull Results Showcase -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
         <div>
           <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Current Summon Outcome</h3>
           <div id="pull-results-container" class="min-h-[140px] flex flex-col justify-center items-center gap-2 border border-dashed border-slate-800 rounded-xl bg-slate-950/40 p-4">
+            <!-- Idle State -->
             <div id="idle-outcome-msg" class="text-center">
               <span class="text-4xl">🌠</span>
               <p class="text-sm text-slate-400 mt-2 font-medium">Summoning portal idle.</p>
               <p class="text-xs text-slate-600 mt-0.5">Your star alignments await.</p>
             </div>
+            
+            <!-- Dynamic Result Elements inserted here -->
             <div id="summon-outcome-grid" class="w-full hidden grid grid-cols-2 sm:grid-cols-5 gap-2"></div>
           </div>
         </div>
       </div>
 
+      <!-- Quick Stats Widget -->
       <div class="grid grid-cols-2 gap-4">
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
           <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Summons</div>
@@ -177,6 +196,7 @@
         </div>
       </div>
 
+      <!-- Simple Toast Message Box -->
       <div id="custom-alert" class="hidden bg-red-950/80 border border-red-800 text-red-200 text-xs rounded-xl p-4 flex items-center justify-between gap-3">
         <span id="custom-alert-text">Insufficient Astral Shards!</span>
         <button onclick="dismissAlert()" class="text-red-400 hover:text-red-200 font-bold px-2 py-1">Dismiss</button>
@@ -186,6 +206,7 @@
 
   </main>
 
+  <!-- Inventory Section (Spans Full Width At Bottom) -->
   <section class="max-w-6xl w-full mx-auto p-4 mb-10">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800 mb-6">
@@ -194,13 +215,15 @@
           <p class="text-xs text-slate-400">Complete listing of characters collected with duplicate stars (Constellations)</p>
         </div>
         <div class="flex gap-2">
+          <!-- Quick filters -->
           <button onclick="filterInventory('all')" id="btn-filter-all" class="bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer">All</button>
-          <button onclick="filterInventory('UR')" id="btn-filter-ur" class="text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer">UR</button>
-          <button onclick="filterInventory('SR')" id="btn-filter-sr" class="text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer">SR</button>
+          <button onclick="filterInventory('UR')" id="btn-filter-ur" class="text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer">UR Only</button>
+          <button onclick="filterInventory('SR')" id="btn-filter-sr" class="text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer">SR Only</button>
         </div>
       </div>
 
       <div id="inventory-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <!-- Dynamic Cards Inserted Here -->
         <div id="empty-inventory-msg" class="col-span-full py-12 text-center text-slate-500 text-sm">
           No records found. Complete your first summon to build your squad!
         </div>
@@ -208,12 +231,14 @@
     </div>
   </section>
 
+  <!-- Footer -->
   <footer class="mt-auto py-6 border-t border-slate-900 text-center text-[10px] text-slate-600 bg-slate-950">
-    Chronicle Summoner | No Real Money Required.
+    Chronicle Summoner | No Real Money Required. Simulated Luck Metrics generated by JavaScript Math.random()
   </footer>
 
+  <!-- Script logic implementing data structures, pools, pulls, state tracking & rendering -->
   <script>
-    // --- GACHA DATABASE DEFINITION ---
+    // --- GACHA DATABASE DEFINITION (UR / SR / R / UC / C) ---
     const GACHA_POOL = {
       'UR': [
         { id: 'ur_faelyn', name: 'Faelyn', title: 'Star Faller', rating: 'UR', emoji: '🎇' }
@@ -245,47 +270,57 @@
       ]
     };
 
-    // --- APPLICATION STATE ---
-    let state = {
+    // --- APPLICATION STATE DEFAULTS ---
+    const DEFAULT_STATE = {
       shards: 16000,
       pityCounter: 0,
       srPityCounter: 0,
       totalPulls: 0,
-      srPulls: 0, 
+      srPulls: 0, // Combined count of UR and SR pulls for stats calculations
       inventory: {}, 
       currentFilter: 'all',
       historyLogs: []
     };
 
+    let state = { ...DEFAULT_STATE };
+
+    // Initialize State safely from Storage
     function init() {
       const saved = localStorage.getItem('text_gacha_simulator_state');
       if (saved) {
-        try { state = JSON.parse(saved); } catch(e) { console.warn(e); }
+        try {
+          const parsed = JSON.parse(saved);
+          // Safely merge elements to protect against undefined variables on schema change
+          state = { ...DEFAULT_STATE, ...parsed };
+          
+          // Migration check: if old save had "ssrPulls" instead of "srPulls", map it gracefully!
+          if (typeof state.srPulls === 'undefined' || isNaN(state.srPulls)) {
+            state.srPulls = parsed.ssrPulls || 0;
+          }
+        } catch(e) {
+          console.warn("Could not load local storage safely, resetting", e);
+          state = { ...DEFAULT_STATE };
+        }
       }
       updateUI();
     }
 
+    // Save state
     function save() {
       localStorage.setItem('text_gacha_simulator_state', JSON.stringify(state));
     }
 
+    // Reset All State
     function resetSimulator() {
-      state = {
-        shards: 16000,
-        pityCounter: 0,
-        srPityCounter: 0,
-        totalPulls: 0,
-        srPulls: 0,
-        inventory: {},
-        currentFilter: 'all',
-        historyLogs: []
-      };
+      state = { ...DEFAULT_STATE };
       save();
       updateUI();
+      // Reset outcome view to idle
       document.getElementById('summon-outcome-grid').classList.add('hidden');
       document.getElementById('idle-outcome-msg').classList.remove('hidden');
     }
 
+    // Get daily allowance
     function getDailyAllowance() {
       state.shards += 1600;
       save();
@@ -297,85 +332,110 @@
     function rollSingle() {
       state.pityCounter++;
       state.srPityCounter++;
-      state.totalPulls++;
+      state.totalPulls = (state.totalPulls || 0) + 1;
 
       let rollRarity = 'C';
       
+      // Determine Rarity
+      // 1. Hard Pity Check (80 pulls guarantees SR)
       if (state.pityCounter >= 80) {
         rollRarity = 'SR';
       } else {
+        // 2. Soft Pity Guarantee (Every 10 pulls guarantees R or above)
         let isPityGuaranteed = (state.srPityCounter >= 10);
         let roll = Math.random() * 100;
         
-        // Exact math constraints match your custom tier criteria
+        // Custom drop rate configurations matching your matrix
         if (roll < 0.5) {
           rollRarity = 'UR';
-        } else if (roll < 1.5) {
+        } else if (roll < 1.5) { // 1.0% chance
           rollRarity = 'SR';
-        } else if (roll < 10.0) { 
+        } else if (roll < 10.0) { // 8.5% chance
           rollRarity = 'R';
-        } else if (roll < 40.0) { 
+        } else if (roll < 40.0) { // 30.0% chance
           rollRarity = 'UC';
         } else {
           rollRarity = 'C';
         }
 
-        // Pity override applies if rolling below R on your 10th pull
+        // Apply soft pity override if applicable
         if (isPityGuaranteed && rollRarity !== 'UR' && rollRarity !== 'SR' && rollRarity !== 'R') {
           rollRarity = 'R';
         }
       }
 
-      // Reset Pity Counter Triggers
+      // Reset Pity Triggers
       if (rollRarity === 'SR') {
         state.pityCounter = 0;
       }
       if (rollRarity === 'UR' || rollRarity === 'SR') {
-        state.srPulls++; // Track premium tiers together
+        state.srPulls = (state.srPulls || 0) + 1;
       }
       if (rollRarity === 'UR' || rollRarity === 'SR' || rollRarity === 'R') {
         state.srPityCounter = 0;
       }
 
+      // Pick random item from pool
       const list = GACHA_POOL[rollRarity];
       const selectedItem = list[Math.floor(Math.random() * list.length)];
 
+      // Register item to inventory
       state.inventory[selectedItem.id] = (state.inventory[selectedItem.id] || 0) + 1;
+
       return selectedItem;
     }
 
+    // Multi Gacha Summon Routine
     function summon(count) {
       dismissAlert();
       const cost = count * 160;
 
       if (state.shards < cost) {
-        showAlert(`Insufficient Shards! Need ${cost} but have ${state.shards}.`);
+        showAlert(`Insufficient Astral Shards! You need ${cost} Shards but only have ${state.shards}.`);
         return;
       }
 
+      // Deduct funds
       state.shards -= cost;
+
+      // Execute Rolls
       const results = [];
       for (let i = 0; i < count; i++) {
         results.push(rollSingle());
       }
 
+      // Render outputs & save
       renderOutcome(results);
       save();
       updateUI();
     }
 
+    // --- UI UPDATER / RENDERING ENGINES ---
     function updateUI() {
-      document.getElementById('currency-display').innerText = state.shards.toLocaleString();
-      document.getElementById('pity-counter').innerText = state.pityCounter;
-      document.getElementById('stat-total-pulls').innerText = state.totalPulls;
+      // Shards
+      document.getElementById('currency-display').innerText = (state.shards || 0).toLocaleString();
       
-      const rate = state.totalPulls > 0 ? ((state.srPulls / state.totalPulls) * 100).toFixed(1) : "0.0";
-      document.getElementById('stat-sr-rate').innerText = `${rate}%`;
+      // Pity Count
+      document.getElementById('pity-counter').innerText = state.pityCounter || 0;
 
+      // Stats
+      document.getElementById('stat-total-pulls').innerText = state.totalPulls || 0;
+      
+      // Safely calculate Pull Rate, avoiding NaN under any browser state condition
+      const total = Number(state.totalPulls) || 0;
+      const premium = Number(state.srPulls) || 0;
+      const srRate = total > 0 ? ((premium / total) * 100).toFixed(1) : "0.0";
+      
+      document.getElementById('stat-sr-rate').innerText = `${srRate}%`;
+
+      // Update Inventory
       renderInventory();
+
+      // Update logs
       renderLogs();
     }
 
+    // Custom alerts
     function showAlert(msg) {
       const el = document.getElementById('custom-alert');
       document.getElementById('custom-alert-text').innerText = msg;
@@ -386,12 +446,16 @@
       document.getElementById('custom-alert').classList.add('hidden');
     }
 
+    // Render outcome list
     function renderOutcome(items) {
       const container = document.getElementById('summon-outcome-grid');
-      document.getElementById('idle-outcome-msg').classList.add('hidden');
-      container.classList.remove('hidden');
-      container.innerHTML = '';
+      const idleMsg = document.getElementById('idle-outcome-msg');
 
+      idleMsg.classList.add('hidden');
+      container.classList.remove('hidden');
+      container.innerHTML = ''; // reset
+
+      // Adjust column layout dynamically depending on pulling count
       if (items.length === 1) {
         container.className = "w-full max-w-sm mx-auto flex justify-center py-2";
       } else {
@@ -400,7 +464,9 @@
 
       items.forEach((item, index) => {
         const itemEl = document.createElement('div');
-        let borderClass = 'border-slate-800 bg-slate-900 text-slate-200';
+        
+        // Define styling classes per rarity
+        let borderClass = 'border-slate-800 bg-slate-900';
         let glowClass = '';
 
         if (item.rating === 'UR') {
@@ -414,10 +480,14 @@
           glowClass = 'shadow-lg shadow-violet-500/10';
         } else if (item.rating === 'UC') {
           borderClass = 'border-sky-800 bg-sky-950/40 text-sky-200';
+        } else {
+          borderClass = 'border-slate-800 bg-slate-950/70 text-slate-400';
         }
 
-        itemEl.className = `p-3 rounded-xl border ${borderClass} ${glowClass} flex flex-col items-center justify-between text-center transition-all transform scale-95 animate-pulse`;
+        // Design cards
+        itemEl.className = `p-3 rounded-xl border ${borderClass} ${glowClass} flex flex-col items-center justify-between text-center transition-all transform scale-95 animate-pulse duration-75`;
         
+        // Timers to create sequential reveal feeling
         setTimeout(() => {
           itemEl.classList.remove('animate-pulse', 'scale-95');
           itemEl.classList.add('scale-100');
@@ -429,8 +499,10 @@
           <div class="text-xs font-bold line-clamp-1 w-full leading-tight ${isPremium ? 'text-slate-950' : 'text-slate-200'}">${item.name}</div>
           <div class="text-[9px] mt-1 ${isPremium ? 'text-slate-900 font-extrabold' : 'text-slate-400 font-semibold'}">${item.rating}</div>
         `;
+
         container.appendChild(itemEl);
 
+        // Append to logs
         let logColor = 'text-slate-400';
         if (item.rating === 'UR') logColor = 'text-fuchsia-400 font-extrabold';
         else if (item.rating === 'SR') logColor = 'text-amber-400 font-bold';
@@ -440,33 +512,41 @@
       });
     }
 
+    // Inventory Renderer
     function renderInventory() {
       const container = document.getElementById('inventory-grid');
-      container.innerHTML = '';
+      container.innerHTML = ''; // reset
+
+      // Gather active card list items
       const itemsToRender = [];
 
       Object.keys(GACHA_POOL).forEach(rarity => {
         GACHA_POOL[rarity].forEach(char => {
           const count = state.inventory[char.id] || 0;
-          if (count > 0) itemsToRender.push({ ...char, count });
+          if (count > 0) {
+            itemsToRender.push({ ...char, count });
+          }
         });
       });
 
+      // Sort by rarity rating (UR -> SR -> R -> UC -> C)
       const rarityRank = { 'UR': 5, 'SR': 4, 'R': 3, 'UC': 2, 'C': 1 };
       itemsToRender.sort((a, b) => rarityRank[b.rating] - rarityRank[a.rating]);
 
+      // Apply quick tab filter logic
       const filtered = itemsToRender.filter(item => {
         if (state.currentFilter === 'all') return true;
         return item.rating === state.currentFilter;
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 text-sm">No characters found matching this criteria.</div>`;
+        container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 text-sm">No characters found matching this criteria. Keep pulling!</div>`;
         return;
       }
 
       filtered.forEach(item => {
         const card = document.createElement('div');
+        
         let rarityLabelColor = 'bg-slate-800 text-slate-300';
         let cardBg = 'bg-slate-950/60 border-slate-800/80';
         let duplicateBadge = '';
@@ -505,12 +585,21 @@
       });
     }
 
+    // Toggle Tab Filters
     function filterInventory(rarity) {
       state.currentFilter = rarity;
-      ['all', 'ur', 'sr'].forEach(id => {
-        document.getElementById(`btn-filter-${id}`).className = 'text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
-      });
-      document.getElementById(`btn-filter-${rarity.toLowerCase()}`).className = 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
+      
+      const btnAll = document.getElementById('btn-filter-all');
+      const btnUr = document.getElementById('btn-filter-ur');
+      const btnSr = document.getElementById('btn-filter-sr');
+
+      const activeClass = 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
+      const inactiveClass = 'text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-3 py-1.5 rounded-lg font-semibold cursor-pointer';
+
+      btnAll.className = (rarity === 'all') ? activeClass : inactiveClass;
+      btnUr.className = (rarity === 'UR') ? activeClass : inactiveClass;
+      btnSr.className = (rarity === 'SR') ? activeClass : inactiveClass;
+
       renderInventory();
     }
 
@@ -518,15 +607,19 @@
     function addLog(action, message, textClass = 'text-slate-300') {
       const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       state.historyLogs.unshift({ timestamp, action, message, textClass });
-      if (state.historyLogs.length > 50) state.historyLogs.pop();
+      
+      if (state.historyLogs.length > 50) {
+        state.historyLogs.pop();
+      }
     }
 
     function renderLogs() {
       const logContainer = document.getElementById('log-list');
-      if (state.historyLogs.length === 0) {
-        logContainer.innerHTML = `<div class="text-slate-500 italic">No history yet.</div>`;
+      if (!state.historyLogs || state.historyLogs.length === 0) {
+        logContainer.innerHTML = `<div class="text-slate-500 italic">No summoning history yet. Harness your cosmic shards and try your luck!</div>`;
         return;
       }
+
       logContainer.innerHTML = state.historyLogs.map(log => `
         <div class="pb-1 border-b border-slate-950/20">
           <span class="text-slate-600">[${log.timestamp}]</span>
@@ -542,6 +635,7 @@
       updateUI();
     }
 
+    // Run Startup Init
     init();
   </script>
 </body>
